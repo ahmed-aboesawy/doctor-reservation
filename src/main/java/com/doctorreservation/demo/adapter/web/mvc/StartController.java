@@ -38,24 +38,4 @@ public class StartController {
 
 
 
-    @PostMapping("/add-user")
-    @ResponseBody
-    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
-    public String addNewUser(@RequestParam String username, @RequestParam String password, @RequestParam String role){
-        User user = new User();
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
-        user.setUsername(username);
-        user.setPassword(encoder.encode(password));
-        userRepository.save(user);
-
-        if(role.equalsIgnoreCase("admin")){
-            groupRepository.save(new AuthGroup(username,"ROLE_USER"));
-            groupRepository.save(new AuthGroup(username,"ROLE_ADMIN"));
-        }else
-            groupRepository.save(new AuthGroup(username,"ROLE_USER"));
-
-        return "Username:  "+username+"      ,Role:  "+role;
-    }
-
-
 }
